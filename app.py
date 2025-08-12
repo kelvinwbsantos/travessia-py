@@ -1,12 +1,12 @@
-import streamlit as st
-import pandas as pd
+import streamlit as st # type: ignore
+import pandas as pd #type: ignore
 from automato import (
     ESTADO_INICIAL,
     ESTADO_FINAL,
     proximo_estado,
     verificar_cadeia_completa
 )
-
+from utils import xor
 # --- Interface Gráfica com Streamlit ---
 
 st.set_page_config(page_title="Travessia do Rio AFD", page_icon="🚢", layout="wide")
@@ -77,11 +77,11 @@ with tab_jogo:
             
             item_clicado = None
             with botoes_col1:
-                if st.button("Levar o Lobo 🐺", use_container_width=True): item_clicado = "Lobo"
-                if st.button("Levar a Couve 🥬", use_container_width=True): item_clicado = "Couve"
+                if st.button("Levar o Lobo 🐺", use_container_width=True, key = "lobo", disabled = (xor(st.session_state.estado_jogo[1], st.session_state.estado_jogo[0]))): item_clicado = "Lobo"
+                if st.button("Levar a Couve 🥬", use_container_width=True, key = "couve", disabled = (xor(st.session_state.estado_jogo[3], st.session_state.estado_jogo[0]))): item_clicado = "Couve"
             with botoes_col2:
-                if st.button("Levar a Cabra 🐐", use_container_width=True): item_clicado = "Cabra"
-                if st.button("Atravessar Sozinho 👨‍🌾", use_container_width=True): item_clicado = "Ninguem"
+                if st.button("Levar a Cabra 🐐", use_container_width=True, key = "cabra", disabled = (xor(st.session_state.estado_jogo[2], st.session_state.estado_jogo[0]))): item_clicado = "Cabra"
+                if st.button("Atravessar Sozinho 👨‍🌾", use_container_width=True, key = "ninguem"): item_clicado = "Ninguem"
 
             if item_clicado:
                 novo_estado, eh_valido, mensagem = proximo_estado(st.session_state.estado_jogo, item_clicado)
