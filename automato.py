@@ -73,8 +73,8 @@ def verificar_cadeia_completa(cadeia_de_movimentos):
         if not movimento_limpo: continue
 
         estado_seguinte, eh_valido, mensagem = proximo_estado(estado_atual, movimento_limpo)
-        
-        acao_desc = f"Levar {movimento_limpo.capitalize()}" if movimento_limpo != "ninguem" else "Atravessar Sozinho"
+        operador = "sozinho" if movimento_limpo.lower() == "f" else "com " + "lobo" if movimento_limpo.lower() == "l" else "com cabra" if movimento_limpo.lower() == "c" else "com alface"
+        acao_desc = f"Atravessar {operador.capitalize()}" if movimento_limpo.lower() != "ninguem" else "Atravessar Sozinho"
         historico.append((acao_desc, estado_seguinte, mensagem))
 
         if not eh_valido:
