@@ -1,28 +1,28 @@
-# Representação do estado: (Fazendeiro, Lobo, Cabra, Couve)
+# Representação do estado: (Fazendeiro, Lobo, Cabra, Alface)
 # 0 = Margem Esquerda, 1 = Margem Direita
 ESTADO_INICIAL = (0, 0, 0, 0)
 ESTADO_FINAL = (1, 1, 1, 1)
 
 # Mapeamento de nomes (em minúsculas para facilitar a entrada do usuário) para índices
 ITENS_MAP = {
-    'lobo': 1,
-    'cabra': 2,
-    'couve': 3,
-    'ninguem': 0 # Representa o fazendeiro atravessando sozinho
+    'l': 1,
+    'c': 2,
+    'a': 3,
+    'f': 0 # Representa o fazendeiro atravessando sozinho
 }
 
 # --- Funções do Autômato ---
 
 def estado_eh_invalido(estado):
-    """
+    """ 
     Verifica se o Estado é válido.
     Retorna (True, mensagem) se inválido.
     """
-    fazendeiro, lobo, cabra, couve = estado
+    fazendeiro, lobo, cabra, alface = estado
     if lobo == cabra and fazendeiro != lobo:
         return True, "❌ FALHA: O lobo comeu a cabra!"
-    if cabra == couve and fazendeiro != cabra:
-        return True, "❌ FALHA: A cabra comeu a couve!"
+    if cabra == alface and fazendeiro != cabra:
+        return True, "❌ FALHA: A cabra comeu a alface!"
     return False, ""
 
 def proximo_estado(estado_atual, item_movido_str):

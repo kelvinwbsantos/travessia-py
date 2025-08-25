@@ -72,16 +72,16 @@ with tab_jogo:
         else:
             st.subheader("O que o fazendeiro deve fazer?")
             botoes_col1, botoes_col2 = st.columns(2)
-            botoes = {"Levar o Lobo 🐺": "Lobo", "Levar a Cabra 🐐": "Cabra",
-                    "Levar a Couve 🥬": "Couve", "Atravessar Sozinho 👨‍🌾": "Ninguem"}
-            
+            botoes = {"Levar o Lobo 🐺": "l", "Levar a Cabra 🐐": "c",
+                    "Levar a alface 🥬": "a", "Atravessar Sozinho 👨‍🌾": "f"}
+
             item_clicado = None
             with botoes_col1:
-                if st.button("Levar o Lobo 🐺", use_container_width=True, key = "lobo", disabled = (xor(st.session_state.estado_jogo[1], st.session_state.estado_jogo[0]))): item_clicado = "Lobo"
-                if st.button("Levar a Couve 🥬", use_container_width=True, key = "couve", disabled = (xor(st.session_state.estado_jogo[3], st.session_state.estado_jogo[0]))): item_clicado = "Couve"
+                if st.button("Levar o Lobo 🐺", use_container_width=True, key = "lobo", disabled = (xor(st.session_state.estado_jogo[1], st.session_state.estado_jogo[0]))): item_clicado = "l"
+                if st.button("Levar a alface 🥬", use_container_width=True, key = "alface", disabled = (xor(st.session_state.estado_jogo[3], st.session_state.estado_jogo[0]))): item_clicado = "a"
             with botoes_col2:
-                if st.button("Levar a Cabra 🐐", use_container_width=True, key = "cabra", disabled = (xor(st.session_state.estado_jogo[2], st.session_state.estado_jogo[0]))): item_clicado = "Cabra"
-                if st.button("Atravessar Sozinho 👨‍🌾", use_container_width=True, key = "ninguem"): item_clicado = "Ninguem"
+                if st.button("Levar a Cabra 🐐", use_container_width=True, key = "cabra", disabled = (xor(st.session_state.estado_jogo[2], st.session_state.estado_jogo[0]))): item_clicado = "c"
+                if st.button("Atravessar Sozinho 👨‍🌾", use_container_width=True, key = "ninguem"): item_clicado = "f"
 
             if item_clicado:
                 novo_estado, eh_valido, mensagem = proximo_estado(st.session_state.estado_jogo, item_clicado)
@@ -90,8 +90,8 @@ with tab_jogo:
                     st.toast(mensagem)
                 else:
                     st.session_state.estado_jogo = novo_estado
-                    
-                    acao_desc = f"Levar {item_clicado.capitalize()}" if item_clicado.lower() != "ninguem" else "Atravessar Sozinho"
+                    operador = "sozinho" if item_clicado.lower() == "f" else "com " + "lobo" if item_clicado.lower() == "l" else "com cabra" if item_clicado.lower() == "c" else "com alface"
+                    acao_desc = f"Atravessar {operador.capitalize()}" if item_clicado.lower() != "ninguem" else "Atravessar Sozinho"
                     st.session_state.historico_jogo.append((acao_desc, novo_estado))
 
                     if not eh_valido:
@@ -116,7 +116,7 @@ with tab_verificador:
 # --- Seção do Verificador de Cadeias ---
 
     st.header("🔍 Verifique uma Sequência Completa")
-    st.markdown("Insira os movimentos separados por vírgula (ex: `cabra, ninguem, lobo, ...`) e o autômato validará a sequência inteira.")
+    st.markdown("Insira os movimentos separados por vírgula (ex: `c(cabra), f(fazendeiro), l(lobo), ...`) e o autômato validará a sequência inteira.")
 
 
     if 'cadeia_exemplo' in st.session_state:
@@ -130,7 +130,7 @@ with tab_verificador:
     cadeia_usuario = st.text_input(
         "Sequência de movimentos:",
         key="cadeia_para_verificar",
-        placeholder="cabra, ninguem, lobo, cabra, couve, ninguem, cabra"
+        placeholder="c, f, l, c, a, f, c"
     )
 
     col_btn1, col_btn2, col_btn3 = st.columns([1,1,1])
@@ -160,10 +160,10 @@ with tab_verificador:
 
     with col_btn2:
         if st.button("Ver Exemplo Positivo", use_container_width=True):
-            st.session_state.cadeia_exemplo = "cabra, ninguem, lobo, cabra, couve, ninguem, cabra"
+            st.session_state.cadeia_exemplo = "c, f, l, c, a, f, c"
             st.rerun()
 
     with col_btn3:
         if st.button("Ver Exemplo Negativo", use_container_width=True):
-            st.session_state.cadeia_exemplo = "lobo, ninguem, couve"
+            st.session_state.cadeia_exemplo = "l, f, a"
             st.rerun()
