@@ -142,14 +142,46 @@ with tab_verificador:
                 movimentos = [m.strip() for m in cadeia_usuario.split(',')]
                 with st.status("Analisando a cadeia...", expanded=True) as status:
                     historico, sucesso = verificar_cadeia_completa(movimentos)
-                    
+                    prevstate = None
                     for i, (acao, estado, msg) in enumerate(historico):
                         m_esq = [e for e, m in {"👨‍🌾": estado[0], "🐺": estado[1], "🐐": estado[2], "🥬": estado[3]}.items() if m == 0]
                         m_dir = [e for e, m in {"👨‍🌾": estado[0], "🐺": estado[1], "🐐": estado[2], "🥬": estado[3]}.items() if m == 1]
                         st.write(f"**Passo {i}: {acao}**")
                         st.text(f"Margem Esquerda: {' '.join(m_esq):<10} | Margem Direita: {' '.join(m_dir)}")
                         st.caption(f"Resultado: {msg}")
-                    
+                        st.write(f"Estado: {estado}")
+                        if estado == (0,0,0,0):
+                            if prevstate:
+                                st.image("./graph_images/q0-v.png")
+                            else:
+                                st.image("./graph_images/q0.png")
+                        elif estado == (1,0,1,0):
+                            if prevstate == (0,0,0,0):
+                                st.image("./graph_images/q1.png")
+                            else:
+                                st.image("./graph_images/q1-v.png")
+                        elif estado == (0,0,1,0):
+                            st.image("./graph_images/q2.png")
+                        elif estado == (1,0,1,1):
+                            st.image("./graph_images/q3.png")
+                        elif estado == (0,0,0,1):
+                            st.image("./graph_images/q4.png")
+                        elif estado == (1,1,1,0):
+                            st.image("./graph_images/q5.png")
+                        elif estado == (0,1,0,0):
+                            st.image("./graph_images/q6.png")
+                        elif estado == (1,1,0,1):
+                            if prevstate == (0,1,0,0):
+                                st.image("./graph_images/q7-6.png")
+                            elif prevstate == (0,0,0,1):
+                                st.image("./graph_images/q7-4.png")
+                            elif prevstate == (0,1,0,1):
+                                st.image("./graph_images/q7-v.png")
+                        elif estado == (0,1,0,1):
+                            st.image("./graph_images/q8.png")
+                        elif estado == (1,1,1,1):
+                            st.image("./graph_images/q9.png")
+                        prevstate = estado
                     if sucesso:
                         status.update(label="Análise Concluída: Solução Válida!", state="complete", expanded=True)
                         st.success("A cadeia fornecida é uma solução válida!")
