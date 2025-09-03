@@ -4,11 +4,32 @@ from automato import (
     ESTADO_INICIAL,
     ESTADO_FINAL,
     proximo_estado,
-    verificar_cadeia_completa
+    verificar_cadeia_completa,
+    ESTADOS_MAP
 )
 from utils import xor
-# --- Interface Gráfica com Streamlit ---
 
+# --- Interface Gráfica com Streamlit ---
+def displayImage(estado, prevstate):
+    if ESTADOS_MAP[estado] == "q7":
+        if prevstate == ESTADOS_MAP["q6"]:
+            st.image("./graph_images/q7-6.png")
+        elif prevstate == ESTADOS_MAP["q4"]:
+            st.image("./graph_images/q7-4.png")
+        elif prevstate == ESTADOS_MAP["q8"]:
+            st.image("./graph_images/q7-v.png")
+    elif ESTADOS_MAP[estado] == "q0":
+        if prevstate:
+            st.image("./graph_images/q0-v.png")
+        else:
+            st.image("./graph_images/q0.png")
+    elif ESTADOS_MAP[estado] == "q1":
+        if prevstate == ESTADOS_MAP["q0"]:
+            st.image("./graph_images/q1.png")
+        elif prevstate == ESTADOS_MAP["q2"]:
+            st.image("./graph_images/q1-v.png")
+    else:
+        st.image(f"./graph_images/{ESTADOS_MAP[estado]}.png")
 st.set_page_config(page_title="Travessia do Rio AFD", page_icon="🚢", layout="wide")
 
 st.title("🚢 Problema da Travesia")
@@ -150,37 +171,38 @@ with tab_verificador:
                         st.text(f"Margem Esquerda: {' '.join(m_esq):<10} | Margem Direita: {' '.join(m_dir)}")
                         st.caption(f"Resultado: {msg}")
                         st.write(f"Estado: {estado}")
-                        if estado == (0,0,0,0):
-                            if prevstate:
-                                st.image("./graph_images/q0-v.png")
-                            else:
-                                st.image("./graph_images/q0.png")
-                        elif estado == (1,0,1,0):
-                            if prevstate == (0,0,0,0):
-                                st.image("./graph_images/q1.png")
-                            else:
-                                st.image("./graph_images/q1-v.png")
-                        elif estado == (0,0,1,0):
-                            st.image("./graph_images/q2.png")
-                        elif estado == (1,0,1,1):
-                            st.image("./graph_images/q3.png")
-                        elif estado == (0,0,0,1):
-                            st.image("./graph_images/q4.png")
-                        elif estado == (1,1,1,0):
-                            st.image("./graph_images/q5.png")
-                        elif estado == (0,1,0,0):
-                            st.image("./graph_images/q6.png")
-                        elif estado == (1,1,0,1):
-                            if prevstate == (0,1,0,0):
-                                st.image("./graph_images/q7-6.png")
-                            elif prevstate == (0,0,0,1):
-                                st.image("./graph_images/q7-4.png")
-                            elif prevstate == (0,1,0,1):
-                                st.image("./graph_images/q7-v.png")
-                        elif estado == (0,1,0,1):
-                            st.image("./graph_images/q8.png")
-                        elif estado == (1,1,1,1):
-                            st.image("./graph_images/q9.png")
+                        # if estado == (0,0,0,0):
+                        #     if prevstate:
+                        #         st.image("./graph_images/q0-v.png")
+                        #     else:
+                        #         st.image("./graph_images/q0.png")
+                        # elif estado == (1,0,1,0):
+                        #     if prevstate == (0,0,0,0):
+                        #         st.image("./graph_images/q1.png")
+                        #     else:
+                        #         st.image("./graph_images/q1-v.png")
+                        # elif estado == (0,0,1,0):
+                        #     st.image("./graph_images/q2.png")
+                        # elif estado == (1,0,1,1):
+                        #     st.image("./graph_images/q3.png")
+                        # elif estado == (0,0,0,1):
+                        #     st.image("./graph_images/q4.png")
+                        # elif estado == (1,1,1,0):
+                        #     st.image("./graph_images/q5.png")
+                        # elif estado == (0,1,0,0):
+                        #     st.image("./graph_images/q6.png")
+                        # elif estado == (1,1,0,1):
+                        #     if prevstate == (0,1,0,0):
+                        #         st.image("./graph_images/q7-6.png")
+                        #     elif prevstate == (0,0,0,1):
+                        #         st.image("./graph_images/q7-4.png")
+                        #     elif prevstate == (0,1,0,1):
+                        #         st.image("./graph_images/q7-v.png")
+                        # elif estado == (0,1,0,1):
+                        #     st.image("./graph_images/q8.png")
+                        # elif estado == (1,1,1,1):
+                        #     st.image("./graph_images/q9.png")
+                        displayImage(estado, prevstate)
                         prevstate = estado
                     if sucesso:
                         status.update(label="Análise Concluída: Solução Válida!", state="complete", expanded=True)
