@@ -10,6 +10,28 @@ ITENS_MAP = {
     'a': 3,
     'f': 0 # Representa o fazendeiro atravessando sozinho
 }
+ESTADOS_MAP = {
+    (0, 0, 0, 0): "q0",
+    (1, 0, 1, 0): "q1",
+    (0, 0, 1, 0):"q2",
+    (1, 0, 1, 1):"q3",
+    (0, 0, 0, 1):"q4",
+    (1, 1, 1, 0):"q5",
+    (0, 1, 0, 0):"q6",
+    (1, 1, 0, 1):"q7",
+    (0, 1, 0, 1):"q8",
+    (1, 1, 1, 1): "q9",
+    "q0":(0, 0, 0, 0),
+    "q1":(1, 0, 1, 0),
+    "q2":(0, 0, 1, 0),
+    "q3":(1, 0, 1, 1),
+    "q4":(0, 0, 0, 1),
+    "q5":(1, 1, 1, 0),
+    "q6":(0, 1, 0, 0),
+    "q7":(1, 1, 0, 1),
+    "q8":(0, 1, 0, 1),
+    "q9":(1, 1, 1, 1),
+}
 
 # --- Funções do Autômato ---
 # procedimento
@@ -68,9 +90,10 @@ def verificar_cadeia_completa(cadeia_de_movimentos):
     """
     estado_atual = ESTADO_INICIAL
     historico = [("Início", estado_atual, "Estado inicial.")]
-    # Cabeçote == movimento
-    # cadeia_de_movimentos == fita
-    # proximo_estado == controle
+    
+    # item movimento == Cabeçote
+    # lista cadeia_de_movimentos == fita
+    # função proximo_estado == controle
     for movimento in cadeia_de_movimentos:
         movimento_limpo = movimento.strip()
         if not movimento_limpo: continue
@@ -92,3 +115,4 @@ def verificar_cadeia_completa(cadeia_de_movimentos):
     else:
         historico.append(("Fim", estado_atual, "❌ FALHA: A cadeia terminou, mas o problema não foi resolvido. Não é estado final."))
         return historico, False
+    
