@@ -2,7 +2,7 @@
 # 0 = Margem Esquerda, 1 = Margem Direita
 ESTADO_INICIAL = (0, 0, 0, 0)
 ESTADO_FINAL = (1, 1, 1, 1)
-
+dicionario = {"a": "alface", "l" : "lobo", "f": "fazendeiro", "c" : "cabra"}
 # Mapeamento de nomes (em minúsculas para facilitar a entrada do usuário) para índices
 ITENS_MAP = {
     'l': 1,
@@ -12,7 +12,7 @@ ITENS_MAP = {
 }
 
 # --- Funções do Autômato ---
-
+# procedimento
 def estado_eh_invalido(estado):
     """ 
     Verifica se o Estado é válido.
@@ -25,6 +25,7 @@ def estado_eh_invalido(estado):
         return True, "❌ FALHA: A cabra comeu a alface!"
     return False, ""
 
+# Controle
 def proximo_estado(estado_atual, item_movido_str):
     """
     Calcula o próximo estado com base na ação. (Matriz de transição)
@@ -40,7 +41,7 @@ def proximo_estado(estado_atual, item_movido_str):
 
     # Validação: o fazendeiro só pode levar algo que está na mesma margem que ele
     if item_movido_idx != 0 and estado_atual[item_movido_idx] != fazendeiro:
-        return estado_atual, False, f"⚠️ Movimento impossível: O(a) {item_movido_str} não está com o fazendeiro."
+        return estado_atual, False, f"⚠️ Movimento impossível: O(a) {dicionario[item_movido_str]} não está com o fazendeiro."
 
     novo_estado = list(estado_atual)
     # O fazendeiro sempre muda de margem
@@ -67,7 +68,9 @@ def verificar_cadeia_completa(cadeia_de_movimentos):
     """
     estado_atual = ESTADO_INICIAL
     historico = [("Início", estado_atual, "Estado inicial.")]
-    
+    # Cabeçote == movimento
+    # cadeia_de_movimentos == fita
+    # proximo_estado == controle
     for movimento in cadeia_de_movimentos:
         movimento_limpo = movimento.strip()
         if not movimento_limpo: continue
